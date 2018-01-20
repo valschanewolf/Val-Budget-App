@@ -1,0 +1,61 @@
+﻿@model IEnumerable<BudgetApp.Models.Budget>
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.BudgetName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BudgetAmount)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.BudgetWarningAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Frequency)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RetainLeftoverAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PreviousLeftoverAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>*@
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.BudgetName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BudgetAmount)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.BudgetWarningAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Frequency)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RetainLeftoverAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PreviousLeftoverAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StartDate)
+        </td>*@
+    </tr>
+}
+</table>
+
+@section scripts {
+	
+	}

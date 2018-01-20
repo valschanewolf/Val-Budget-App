@@ -1,0 +1,533 @@
+﻿@model BudgetApp.Models.DashboardGuestAtFrontDoorViewModel
+@using BudgetApp.Helpers;
+@using BudgetApp.Models;
+
+@{
+	ViewBag.Title = "Getting Started with the Coinbank App";
+}
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="card-box p-b-0">
+			<h4 class="header-title m-t-0 m-b-30">@ViewBag.Title</h4>
+
+			<div id="progressbarwizard" class="pull-in">
+				<ul>
+					<li><a href="#step1" data-toggle="tab">Build your house</a></li>
+					<li><a href="#step2" data-toggle="tab">Set your budget</a></li>
+					<li><a href="#step3" data-toggle="tab">Invite people to join you</a></li>
+					<li><a href="#step4" data-toggle="tab">Spend some money</a></li>
+				</ul>
+				<div class="tab-content b-0 m-b-0">
+					<div id="bar" class="progress progress-lg progress-striped progress-bar-success-alt active">
+						<div class="bar progress-bar progress-bar-success"></div>
+					</div>
+					<div class="tab-pane p-t-10 fade" id="step1">
+						@using (Ajax.BeginForm("DashboardGuestAtFrontDoor", "Dashboard", new AjaxOptions { HttpMethod = "POST" }, new { @class = "form-horizontal", id = "buildHouse" }))
+						{
+						@Html.AntiForgeryToken()
+							<div class="row">
+								<div class="col-md-5">
+									<div class="thumbnail">
+										<img src="~/Content/assets/images/House.jpg" class="img-responsive img-thumbnail img-rounded" />
+									</div>
+								</div>
+								<div class="col-md-7 m-t-30">
+									<div class="row">
+										<div class="col-md-12">
+											<h3 class="m-b-20">The first step in building your house . . .</h3>
+											<p class="m-t-20 m-b-10" style="font-size: large">
+												First, give your household a name, a way to identify your household.
+											</p>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											@*@Html.LabelFor(model => model.HouseholdName, "Household Name", new { @class = "form-label" })*@
+											@Html.EditorFor(model => model.householdName, new { htmlAttributes = new { @class = "required form-control", id = "HouseholdName", placeholder = "Household Name" } })
+											@Html.ValidationMessageFor(model => model.householdName, "", new { @class = "text-danger" })
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<p class="m-t-20 m-b-10" style="font-size: large">
+												Then, tell us about a bank account where you currently have money. This should be your primary account, and you'll have an opportunity to add more accounts later.
+											</p>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-8">
+											@*@Html.LabelFor(model => model.AccountName, "Bank Account Name", new { @class = "form-label" })*@
+											@Html.EditorFor(model => model.accountName, new { htmlAttributes = new { @class = "required form-control", id = "AccountName", placeholder = "Bank Account Name" } })
+											@Html.ValidationMessageFor(model => model.accountName, "", new { @class = "text-danger" })
+										</div>
+										<div class="col-md-4">
+											@*@Html.LabelFor(model => model.CreatedAmount, "Current Account Balance", new { @class = "form-label" })*@
+											@Html.EditorFor(model => model.createdAmount, new { htmlAttributes = new { @class = "required form-control vertical-spin" } })
+											@Html.ValidationMessageFor(model => model.createdAmount, "", new { @class = "text-danger" })
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											@Html.TextAreaFor(model => model.accountDescription, htmlAttributes: new { @class = "required form-control", id = "AccountDescription", maxlength = "225", placeholder = "Account Description" })
+											@Html.ValidationMessageFor(model => model.accountDescription, "", new { @class = "text-danger" })
+										</div>
+									</div>
+								</div>
+							</div>
+							@*<div class="row">
+									<h6>*</h6>
+								</div>*@
+							<div class="row">
+								<div class="col-md-12">
+									<ul class="pager m-b-0 wizard">
+										<li class="previous first" style="display:none;">
+											<a href="#">First</a>
+										</li>
+										<li class="previous"><a href="#" class="btn btn-danger w-md waves-light" style="border-radius: 2em; padding: 6px 18px;">Previous</a></li>
+										<li class="next last" style="display:none;"><a href="#">Last</a></li>
+										<li class="next"><button type="submit" class="btn btn-rounded btn-danger w-md waves-effect waves-light pull-right">Next</button></li>
+									</ul>
+								</div>
+							</div>
+						}
+					</div>
+
+					<div class="tab-pane p-t-10 fade" id="step2">
+						<div class="row">
+							<div class="col-md-5">
+								<div class="thumbnail">
+									<img src="~/Content/assets/images/Budget.jpg" />
+								</div>
+							</div>
+							<div class="col-md-7 m-t-30">
+								<div class="row">
+									<div class="col-md-12">
+										<h3 class="m-b-20">Now it's time to set your budget . . . </h3>
+										<p class="m-t-20 m-b-10" style="font-size: large">
+											You'll identify your top expense categories and items. We've provided some suggested categories and items, plus you'll be able to
+											add and and customize your own. We'll use the information you provide in this step to send alerts when overspend and show you
+											what's left each month when you underspend.
+										</p>
+									</div>
+								</div>
+								<div class="row m-b-20">
+									<div class="col-md-12">
+										<div class="text-center">
+											<a href="#selectBudgetItemType" id="addItems" class="btn btn-warning btn-rounded w-lg waves-effect waves-light" data-toggle="modal">
+												<i class="zmdi zmdi-plus"></i> Add New
+											</a>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div id="budgetAdded">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<ul class="pager m-b-0 wizard">
+								<li class="previous first" style="display:none;">
+									<a href="#">First</a>
+								</li>
+								<li class="previous"><a href="#" class="btn btn-danger w-md waves-light" style="border-radius: 2em; padding: 6px 18px;">Previous</a></li>
+								<li class="next last" style="display:none;"><a href="#">Last</a></li>
+								<li class="next"><button type="submit" class="btn btn-danger btn-warning w-md waves-effect waves-light pull-right" style="border-radius: 2em; padding: 6px 18px;">Next</button></li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="tab-pane p-t-10 fade" id="step3">
+						<div class="row">
+							<div class="col-md-5">
+								<div class="thumbnail">
+									<img src="~/Content/assets/images/Invitation.png" />
+								</div>
+							</div>
+							<div class="col-md-7 m-t-30">
+								<div class="row">
+									<div class="col-md-12">
+										<h3 class="m-b-20">Invite someone to join your household . . . </h3>
+										<p class="m-t-20 m-b-10" style="font-size: large">
+											You'll enter an email address for anyone you'd like to be a part of your household. Once they've accepted
+											your invite, they'll be able to view your budget and enter transactions.
+										</p>
+									</div>
+								</div>
+								<div class="row m-b-20">
+									<div class="col-md-12">
+										<div class="text-center">
+											<a href="#sendInvitations" id="addInvite" class="btn btn-warning btn-rounded w-lg waves-effect waves-light" data-toggle="modal">
+												<i class="zmdi zmdi-plus"></i> Add an Invite
+											</a>
+										</div>
+									</div>
+								</div>
+								<div class="row m-b-20">
+									<div class="col-md-12">
+										<div id="inviteEmailAdded"></div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<ul class="pager m-b-0 wizard">
+										<li class="previous first" style="display:none;">
+											<a href="#">First</a>
+										</li>
+										<li class="previous"><a href="#" class="btn btn-danger w-md waves-light" style="border-radius: 2em; padding: 6px 18px;">Previous</a></li>
+										<li class="next last" style="display:none;"><a href="#">Last</a></li>
+										<li class="next"><button type="submit" class="btn btn-rounded btn-danger w-md waves-effect waves-light pull-right">Next</button></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="tab-pane p-t-10 fade" id="step4">
+						<div class="row">
+							<div class="col-md-5">
+								<div class="thumbnail">
+									<img src="~/Content/assets/images/BudgetAppReceipts.png" />
+								</div>
+							</div>
+							<div class="col-md-7 m-t-30">
+								<div class="row">
+									<div class="col-md-12">
+										<h3 class="m-b-20">Get started tracking where your money goes . . . </h3>
+										<p class="m-t-20 m-b-10" style="font-size: large">
+											You'll also have an opportunity to change anything that you've set up so far.
+										</p>
+									</div>
+								</div>
+								<div class="row m-b-20 m-t-30">
+									<div class="col-md-12">
+										<div class="text-center">
+											<a href="@Url.Action("Dashboard", "Home")" class="btn btn-warning btn-rounded w-md btn-lg btn-block waves-effect waves-light" id="showCollectedData">Continue</a>
+										</div>
+									</div>
+								</div>
+								<div class="row m-b-20">
+									<div class="col-md-12">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12 m-b-0">
+									@*<a href="@Url.Action("Dashboard", "Home")" class="btn btn-warning btn-rounded w-md btn-lg waves-effect waves-light" id="showCollectedData">Continue</a>*@
+								</div>
+							</div>
+
+							@*<div class="row">
+									<div class="col-md-12">
+										<ul class="pager m-b-0 wizard">
+											<li class="previous first" style="display:none;">
+												<a href="#">First</a>
+											</li>
+											<li class="previous"><a href="#" class="btn btn-warning w-lg waves-light">Previous</a></li>
+											<li class="next last" style="display:none;"><a href="#">Last</a></li>
+											<li class="next"><a href="#" class="btn btn-warning w-lg waves-effect waves-light">Next</a></li>
+										</ul>
+									</div>
+								</div>*@
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="selectBudgetItemType" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createBudgetModal" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Create A Budget Item</h4>
+			</div>
+			@using (Ajax.BeginForm("BudgetCreate", "Dashboard", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "budgetAdded", LoadingElementId = "loadingIcon" }))
+			{
+			@Html.AntiForgeryToken()
+				<div class="modal-body">
+					<div class="form-horizontal">
+						<div class="row">
+							<div class="col-sm-6">
+								@Html.Label("Choose a Budget Item(& Category)")
+								<select class="form-control select2" id="budgetCategoriesTypes" name="BudgetName">
+									<option value="Select">Select</option>
+									<optgroup label="(Income)">
+										<option value="Income/Paycheck">Paycheck</option>
+										<option value="Income/Bonus">Bonus</option>
+									</optgroup>
+									<optgroup label="(Auto & Transportation)">
+										<option value="Auto & Transportation/Gas">Gas</option>
+										<option value="Auto & Transportation/Service">Service</option>
+										<option value="Auto & Transportation/Taxi & Uber">Taxi/Uber</option>
+										<option value="Auto & Transportation/Payment">Payment</option>
+										<option value="Auto & Transportation/Insurance">Insurance</option>
+									</optgroup>
+									<optgroup label="(Entertainment)">
+										<option value="Entertainment/Movies">Movies/DVDS</option>
+										<option value="Entertainment/Music">Music/Concerts</option>
+										<option value="Entertainment/Print">Books/Newspaper/Magazines</option>
+									</optgroup>
+									<optgroup label="(Food & Dining)">
+										<option value="Food & Dining/Bars">Bars</option>
+										<option value="Food & Dining/Coffee Shops">Coffee Shops</option>
+										<option value="Food & Dining/Fast Food">Fast Food</option>
+										<option value="Food & Dining/Dining Out">Dining Out</option>
+										<option value="Food & Dining/Groceries">Groceries</option>
+									</optgroup>
+									<optgroup label="(Health & Fitness)">
+										<option value="Health & Fitness/Dentist">Dentist</option>
+										<option value="Health & Fitness/Doctor">Doctor</option>
+										<option value="Health & Fitness/Eyecare">Eyecare</option>
+										<option value="Health & Fitness/Gym">Gym</option>
+										<option value="Health & Fitness/Pharmacy">Pharmacy</option>
+										<option value="Health & Fitness/Health Insurance">Health Insurance</option>
+									</optgroup>
+									<optgroup label="(Home)">
+										<option value="Home/Furnishings">Furnishings</option>
+										<option value="Home/Home Improvement">Home Improvement</option>
+										<option value="Home/Lawn & Garden">Lawn & Garden</option>
+										<option value="Home/Mortgage & Rent">Mortgage/Rent</option>
+										<option value="Home/Home Supplies">Home Supplies</option>
+									</optgroup>
+									<optgroup label="(Personal Care)">
+										<option value="Personal Care/Hair">Hair</option>
+										<option value="Personal Care/Spa">Spa</option>
+										<option value="Personal Care/Products">Products</option>
+									</optgroup>
+									<optgroup label="(Shopping)">
+										<option value="Shopping/Clothing">Clothing</option>
+										<option value="Shopping/Shoes">Shoes</option>
+									</optgroup>
+									<optgroup label="(Travel)">
+										<option value="Travel/Air">Air Travel</option>
+										<option value="Travel/Hotel">Hotel</option>
+										<option value="Travel/Rental Car">Rental Car</option>
+										<option value="Travel/Vacation">Vacation</option>
+									</optgroup>
+									<optgroup label="(Utilities)">
+										<option value="Utilities/Cable">Cable</option>
+										<option value="Utilities/Internet">Internet</option>
+										<option value="Utilities/Mobile Phone">Mobile Phone</option>
+										<option value="Utilities/Electricity">Electricity</option>
+										<option value="Utilities/Gas">Gas</option>
+										<option value="Utilities/Water">Water</option>
+									</optgroup>
+								</select>
+							</div>
+							<div class="col-sm-6">
+								@Html.Label("Enter a Budget Amount")
+								@Html.Editor("itemAmount", new { htmlAttributes = new { @class = "required form-control vertical-spin", id = "budgetAmount", LoadingElementId = "loadingIcon" } })
+								@Html.ValidationMessage("itemAmount", "", new { @class = "text-danger" })
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-warning btn-rounded w-md" id="closeModal">Save</button>
+					<button type="button" class="btn btn-danger btn-rounded w-md" id="addCustom">Custom Item</button>
+					<a href="#" type="button" class="btn btn-default btn-rounded w-md waves-effect" data-dismiss="modal">Cancel</a>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+<div id="createBudgetItemType" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createBudgetModal" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Create A Custom Budget Item</h4>
+			</div>
+			@using (Ajax.BeginForm("CreateCustom", "Dashboard", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "budgetAdded", LoadingElementId = "loadingIcon" }))
+			{
+			@Html.AntiForgeryToken()
+				<div class="modal-body">
+					<div class="form-horizontal">
+						<div class="row">
+							<div class="col-sm-6">
+								@Html.Label("Create a custom category")
+								@Html.Editor("ItemCategory", new { htmlAttributes = new { @class = "form-control", id = "itemCategory" } })
+							</div>
+							<div class="col-sm-6">
+								@Html.Label("Create a custom item")
+								@Html.Editor("ItemName", new { htmlAttributes = new { @class = "form-control", id = "itemName" } })
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							@Html.Label("Enter a Budget Amount")
+							@Html.Editor("ItemAmount", new { htmlAttributes = new { @class = "required form-control vertical-spin", id = "itemAmount" } })
+							@Html.ValidationMessage("ItemAmount", "", new { @class = "text-danger" })
+						</div>
+						<div class="col-sm-6">
+							@Html.Label("Is this Income or an Expense?")
+							<select class="form-control select2" id="itemType" name="ItemType">
+								<option value="Select">Select</option>
+								<option value="Income">Income</option>
+								<option value="Expense">Expense</option>
+							</select>
+
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-warning btn-rounded w-md" id="closeCustomModal">Save</button>
+					<a href="#" type="button" class="btn btn-default btn-rounded w-md waves-effect" data-dismiss="modal">Cancel</a>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+<div id="sendInvitations" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="sendInvitationsModal" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Send Invitations to Join your Household</h4>
+			</div>
+			@using (Ajax.BeginForm("Create", "Invitations", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "inviteEmailAdded", LoadingElementId = "loadingIcon" }))
+			{
+			@Html.AntiForgeryToken()
+				<div class="modal-body">
+					<div class="form-horizontal">
+						<div class="row">
+							<div class="col-sm-12">
+								@Html.Label("Enter an email address")
+								@Html.Editor("email", new { htmlAttributes = new { @class = "form-control", id = "inviteEmail" } })
+								@Html.ValidationMessage("email", "", new { @class = "text-danger" })
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<input type="submit" class="btn btn-warning btn-rounded w-md" value="Send" id="closeInviteModal" />
+					<a href="#" type="button" class="btn btn-default btn-rounded w-md waves-effect" data-dismiss="modal">Cancel</a>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+<div id="loadingIcon" style="display: none; position: absolute; top: 50%; left: 50%; padding: 2px;">
+	<img src="~/Content/assets/images/Rolling.gif" />
+</div>
+
+@section scripts {
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+			$("#closeModal").click(function() {
+				$("#selectBudgetItemType").modal("toggle");
+			});
+
+			$("#closeCustomModal").click(function() {
+				$("#createBudgetItemType").modal("toggle");
+			});
+
+			$("#closeInviteModal").click(function() {
+				$("#sendInvitations").modal("toggle");
+			});
+
+			$("#addCustom").click(function() {
+				$("#selectBudgetItemType").modal("toggle");
+				$("#createBudgetItemType").modal("toggle");
+			});
+
+			$('#addItems').click(function() {
+				$("#budgetItemForm").trigger("reset");
+			});
+
+			$("#budgetCategoriesTypes").select2({
+				maximumSelectionLength: 1
+			});
+
+			//$('#itemCategoryTypeTable').editableTableWidget().numericInputExample().find('td:first').focus();
+
+			//$('.datatable-responsive').DataTable();
+
+			var $validator = $("#buildHouse").validate({
+				rules: {
+					HouseholdName: {
+						required: true,
+						minlength: 2
+					},
+					AccountName: {
+						required: true,
+						minlength: 3
+					},
+					AccountDescription: {
+						required: true,
+						minlength: 3
+					},
+					CreatedAmount: {
+						required: true,
+						min: 1.00,
+						number: true,
+						//minlength: 1
+					},
+
+				}
+			});
+
+			$('#progressbarwizard').bootstrapWizard({
+				onTabClick: function(tab, navigation, index) {
+					var $valid = $("#buildHouse").valid();
+					if (!$valid) {
+						$validator.focusInvalid();
+						return false;
+					}
+					var $total = navigation.find('li').length;
+					var $current = index + 1;
+					var $percent = ($current / $total) * 100;
+					$('#progressbarwizard').find('.bar').css({ width: $percent + '%' });
+				},
+				onTabShow: function(tab, navigation, index) {
+					var $total = navigation.find('li').length;
+					var $current = index + 1;
+					var $percent = ($current / $total) * 100;
+					$('#progressbarwizard').find('.bar').css({ width: $percent + '%' });
+				},
+				tabClass: 'nav nav-tabs navtab-wizard nav-justified bg-muted',
+				onNext: function(tab, navigation, index) {
+					var $valid = $("#buildHouse").valid();
+					if (!$valid) {
+						$validator.focusInvalid();
+						return false;
+					}
+				}
+			});
+		});
+
+		$(".vertical-spin").TouchSpin({
+			min: 0.00,
+			max: 999999.99,
+			initval: 0.00,
+			decimals: 2,
+			step: 1.00,
+			forcestepdivisibility: "none",
+			verticalbuttons: true,
+			buttondown_class: "btn btn-warning",
+			buttonup_class: "btn btn-warning",
+			verticalupclass: 'ti-plus',
+			verticaldownclass: 'ti-minus'
+		});
+
+		$('textarea#AccountDescription').maxlength({
+			alwaysShow: true,
+			warningClass: "label label-warning",
+			limitReachedClass: "label label-danger",
+			separator: ' out of ',
+			preText: 'You typed ',
+			postText: ' chars available.',
+			validate: true
+		});
+	</script>
+}

@@ -1,0 +1,92 @@
+﻿@model BudgetApp.Models.DashboardGuestAtFrontDoorViewModel
+@using BudgetApp.Helpers;
+@using BudgetApp.Models;
+
+@{
+	ViewBag.Title = "Guest Household Dashboard";
+}
+
+<div class="row">
+	<div class="col-sm-12">
+		@*<div class="btn-group pull-right m-t-15">
+				<button type="button" class="btn btn-custom dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false">Settings <span class="m-l-5"><i class="fa fa-cog"></i></span></button>
+				<ul class="dropdown-menu" role="menu">
+					<li><a href="#">Action</a></li>
+					<li><a href="#">Another action</a></li>
+					<li><a href="#">Something else here</a></li>
+					<li class="divider"></li>
+					<li><a href="#">Separated link</a></li>
+				</ul>
+			</div>*@
+		<h4 class="page-title">@ViewBag.Title</h4>
+	</div>
+</div>
+<div class="row">
+	@*<div class="col-sm-12">*@
+	<div class="col-sm-12">
+		<div class="card-box p-b-0">
+			<div class="dropdown pull-right">
+				<a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">
+					<i class="zmdi zmdi-more-vert"></i>
+				</a>
+				<ul class="dropdown-menu" role="menu">
+					<li><a href="#">Action</a></li>
+					<li><a href="#">Another action</a></li>
+					<li><a href="#">Something else here</a></li>
+					<li class="divider"></li>
+					<li><a href="#">Separated link</a></li>
+				</ul>
+			</div>
+			<h4 class="header-title m-t-0 m-b-30">@ViewBag.Title</h4>
+@using (Html.BeginForm("DashboardGuestAtFrontDoor", "Dashboard", FormMethod.Post, new { @class = "form-horizontal", id = "buildHouse" }))
+{
+	@Html.AntiForgeryToken()
+
+					<div class="tab-content b-0 m-b-0">
+							<div class="row m-l-15 m-r-15 m-t-15 m-b-15">
+								<div class="col-md-3">
+									<img src="~/Content/assets/images/House.jpg" class="img-responsive img-thumbnail img-rounded" style="height: auto; width: auto;" />
+								</div>
+
+								<div class="col-md-9 m-t-15">
+									<div class="control-group">
+										<div class="col-md-12 m-b-20">
+											@Html.LabelFor(model => model.HouseholdName, "Household Name", new { @class = "control-label" })
+											@Html.EditorFor(model => model.HouseholdName, new { htmlAttributes = new { @class = "form-control", id = "HouseholdName" } })
+											@Html.ValidationMessageFor(model => model.HouseholdName, "", new { @class = "text-danger" })
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-8 m-b-20">
+											@Html.LabelFor(model => model.AccountName, "Bank Account Name", new { @class = "control-label" })
+											@Html.EditorFor(model => model.AccountName, new { htmlAttributes = new { @class = "form-control", id = "AccountName" } })
+											@Html.ValidationMessageFor(model => model.AccountName, "", new { @class = "text-danger" })
+										</div>
+										<div class="col-md-4 m-b-20">
+											@Html.LabelFor(model => model.CreatedAmount, "Current Account Balance", new { @class = "control-label" })
+											@Html.EditorFor(model => model.CreatedAmount, new { htmlAttributes = new { @class = " form-control", id = "CreatedAmount" } })
+											@Html.ValidationMessageFor(model => model.CreatedAmount, "", new { @class = "text-danger" })
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											@Html.LabelFor(model => model.AccountDescription, "Account Description", new { @class = "control-label" })
+											@Html.EditorFor(model => model.AccountDescription, new { htmlAttributes = new { @class = "form-control", id = "AccountDescription" } })
+											@Html.ValidationMessageFor(model => model.AccountDescription, "", new { @class = "text-danger" })
+										</div>
+									</div>
+									<div class="row">
+										<button type="submit" class="btn btn-warning w-lg waves-effect waves-light">Submit</button>
+									</div>
+
+								</div>
+							</div>
+						</div>
+}
+		</div>
+	</div>
+</div>
+
+@section scripts {
+
+}

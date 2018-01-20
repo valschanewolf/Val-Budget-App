@@ -1,0 +1,60 @@
+﻿@model BudgetApp.Models.AddTransactionViewModel
+
+<div class="form-horizontal">
+	<div class="form-group">
+		<div class="col-md-12">
+			@Html.Label("Transaction Description")
+			@Html.TextAreaFor(model => model.transaction.Description, htmlAttributes: new { @class = "required form-control m-b-20", id = "transactionDescription", maxlength = "225", placeholder = "Transaction Description" })
+			@Html.ValidationMessageFor(model => model.transaction.Description, "", new { @class = "text-danger" })
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-md-6">
+			@Html.Label("Transaction Amount")
+			@Html.EditorFor(model => model.transaction.TransactionAmount, new { htmlAttributes = new { @class = "required form-control vertical-spin", id = "transactionAmount" } })
+			@Html.ValidationMessage("TransactionAmount", "", new { @class = "text-danger" })
+		</div>
+		<div class="col-md-6">
+			@*@Html.CheckBoxFor(model => model.transaction.Reconciled, new { @class = "checkbox-inline", style = "cursor: pointer; display: inline-block; height: 20px; width: 20px;" })
+			@Html.Label("Reconciled Amount")
+			@Html.EditorFor(model => model.transaction.ReconciledAmount, new { htmlAttributes = new { @class = "form-control vertical-spin", id = "reconciledAmount" } })
+			@Html.ValidationMessage("ReconciledAmount", "", new { @class = "text-danger" })*@
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-md-6">
+			@Html.Label("Budget Item")
+			@Html.DropDownList("BudgetItemId", ViewBag.BudgetItemId as SelectList, "Select", htmlAttributes: new { @class = "form-control select2" })
+		</div>
+		<div class="col-md-6">
+			@Html.Label("Bank Account")
+			@Html.DropDownListFor(model => model.transaction.BankAccountId, ViewBag.BankAccountId as SelectList, "Select", new { @class = "form-control select2 m-b-20" })
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+		$('textarea#AccountDescription').maxlength({
+			alwaysShow: true,
+			warningClass: "label label-success",
+			limitReachedClass: "label label-danger",
+			separator: ' out of ',
+			preText: 'You typed ',
+			postText: ' chars available.',
+			validate: true
+		});
+
+		$(".vertical-spin").TouchSpin({
+			min: 0.00,
+			max: 999999.99,
+			initval: 0.00,
+			decimals: 2,
+			step: 1.00,
+			forcestepdivisibility: "none",
+			verticalbuttons: true,
+			buttondown_class: "btn btn-primary",
+			buttonup_class: "btn btn-primary",
+			verticalupclass: 'ti-plus',
+			verticaldownclass: 'ti-minus'
+		});
+</script>

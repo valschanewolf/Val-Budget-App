@@ -1,0 +1,66 @@
+﻿@model BudgetApp.Models.Notification
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Notification</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Recipient.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Recipient.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sender.HouseholdName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sender.HouseholdName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateSent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateSent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NotificationReason)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NotificationReason)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NotificationContent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NotificationContent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Archived)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Archived)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

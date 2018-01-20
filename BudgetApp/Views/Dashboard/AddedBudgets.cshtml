@@ -1,0 +1,44 @@
+﻿@model IEnumerable<BudgetApp.Models.BudgetItem>
+
+<table id="datatable-budgets" class="table table-striped table-bordered table-responsive">
+	<thead>
+		<tr>
+			<th>Budget</th>
+			<th>Item</th>
+			<th style="text-align: right;">Budget<br />Amount</th>
+			<th style="text-align: right;">Current<br />Amount</th>
+			@*<th class="nosort"></th>*@
+		</tr>
+	</thead>
+
+	<tbody>
+		@foreach (var item in Model)
+		{
+		<tr>
+			<td>@item.Budget.BudgetName</td>
+			<td>@item.ItemName</td>
+			<td style="text-align: right;">@item.ItemAmount.ToString("C")</td>
+			<td style="text-align: right;">@item.ItemCurrentAmount.ToString("C")</td>
+			@*<td style="text-align: center;">
+				<a href="javascript:void(0)"><i class="fa fa-pencil m-r-10" style="color: #10c469;"></i></a>
+				<a href="javascript:void(0)"><i class="fa fa-trash-o m-l-5" style="color: #10c469;"></i></a>
+			</td>*@
+		</tr>
+		}
+	</tbody>
+</table>
+
+
+<script type="text/javascript">
+	$('#datatable-budgets').DataTable({
+		responsive: true,
+		'columnDefs': [{
+			'targets': 'nosort',
+			'orderable': false
+		}]
+	});
+	//$(document).ready(function() {
+	//	$('.table-responsive').DataTable();
+
+	//});
+</script>

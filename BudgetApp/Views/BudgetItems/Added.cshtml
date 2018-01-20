@@ -1,0 +1,38 @@
+﻿@model IEnumerable<BudgetApp.Models.Budget>
+
+<table id="datatable-budgets" class="table table-striped table-bordered table-responsive">
+	<thead>
+		<tr>
+			<th>Budget Category</th>
+			<th>Budget Item</th>
+			<th>Budget Amount</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		@foreach (var item in Model)
+		{
+			foreach (var bitem in item.BudgetItems)
+			{
+			<tr>
+				<td>@item.BudgetName</td>
+				<td>@bitem.ItemName</td>
+				<td style="text-align: right;">@bitem.ItemAmount.ToString("C")</td>
+			</tr>
+			}
+		}
+	</tbody>
+</table>
+<script type="text/javascript">
+	$('.table-responsive').DataTable({
+		responsive: true,
+		'columnDefs': [{
+			'targets': 'nosort',
+			'orderable': false
+		}]
+	});
+		//$(document).ready(function() {
+		//	$('.table-responsive').DataTable();
+
+		//});
+</script>

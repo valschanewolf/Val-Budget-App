@@ -1,0 +1,601 @@
+﻿@model BudgetApp.Models.DashboardHeadOfHouseholdViewModel
+@using BudgetApp.Helpers;
+@using BudgetApp.Models;
+
+@{
+	ViewBag.Title = "Head Of Household Dashboard";
+	HouseholdHelper householdHelper = new HouseholdHelper();
+}
+
+
+<div class="content">
+	<div class="col-md-8">
+		<div class="card-box p-b-10 p-t-10">
+			<div class="row">
+				<div class="pannel-group" id="accordion" role="tablist">
+					<div class="panel panel-default bx-shadow-none m-b-5">
+						<div class="panel-heading" role="tab" id="headingMembers">
+							<h4 class="header-title">
+								<img src="~/Content/assets/images/MembersIcon.png" class="media-heading img-circle img-thumbnail m-r-10" style="width: 64px; height: 64px;" />
+								<a role="button" href="#collapseMembers" data-toggle="collapse" data-parent="#accordion">
+									<span style="color: #10c469; font-weight: 500;">members</span>
+								</a>
+							</h4>
+						</div>
+						<div class="panel-collapse collapse" id="collapseMembers" role="tabpanel">
+							<button class="btn btn-block btn-warning btn-rounded btn-lg waves-effect waves-light m-b-5 m-t-20"><span>Send an Invite</span> </button>
+							<div class="panel-body">
+								<div class="card-box widget-user">
+									<button class="btn btn-icon waves-effect waves-light btn-lg m-b-5 pull-left"> <i class="fa fa-user-circle"></i> </button>
+									<div class="wid-u-info">
+										<span class="font-600 m-t-0 m-l-0">Chadengle</span>
+										<p class="text-muted m-b-5 font-13">coderthemes@gmail.com</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel panel-default bx-shadow-none m-b-5">
+						<div class="panel-heading" role="tab" id="headingAccounts">
+							<h4 class="header-title">
+								<img src="~/Content/assets/images/AccountsIcon.png" class="media-heading img-circle img-thumbnail m-r-10" style="width: 64px; height: 64px;" />
+								<span style="color: #10c469;">
+									@Ajax.ActionLink("accounts", "BankAccountsListUpdate", "Dashboard", null, ajaxOptions: new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "bankAccountAdded", OnComplete = "showBankAccountsList", LoadingElementId = "loadingIcon" }, htmlAttributes: new { @class = "header-title", style = "color: #10c469; font-weight: 500;" })
+								</span>
+								<a href="#addBankAccountModal" id="addBankAccount" data-toggle="modal">
+									<i class="m-t-20 fa fa-plus-square fa-lg fa-pull-right" style="color: #10c469;"></i>
+								</a>
+							</h4>
+						</div>
+						<div class="panel-collapse collapse" id="collapseAccounts" role="tabpanel">
+							<div class="panel-body">
+								<div id="bankAccountAdded">
+									<table id="datatable-accounts" class="table table-striped table-bordered table-responsive">
+										<thead>
+											<tr>
+												<th>Account Name</th>
+												<th>Account Description</th>
+												<th style="text-align: right;">Current<br /> Balance</th>
+												<th class="nosort"></th>
+											</tr>
+										</thead>
+										@foreach (var item in Model.bankAccountList)
+										{
+										<tr>
+											<td>@item.AccountName</td>
+											<td>@item.AccountDescription</td>
+											<td style="text-align: right;">@item.CreatedAmount.ToString("C")</td>
+											<td style="text-align: center;">
+												<a href="javascript:void(0)"><i class="fa fa-pencil m-r-10" style="color: #10c469;"></i></a>
+												<a href="javascript:void(0)"><i class="fa fa-trash-o m-l-5" style="color: #10c469;"></i></a>
+											</td>
+										</tr>
+										}
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-default bx-shadow-none m-b-5">
+						<div class="panel-heading" role="tab" id="headingBudgets">
+							<h4 class="header-title">
+								<img src="~/Content/assets/images/BudgetsIcon.png" class="media-heading img-circle img-thumbnail m-r-10" style="width: 64px; height: 64px;" />
+								<span style="color: #10c469;">
+									@Ajax.ActionLink("budgets", "BudgetItemsListUpdate", "Dashboard", null, ajaxOptions: new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "budgetAdded", OnComplete = "showBudgetItemsList", LoadingElementId = "loadingIcon" }, htmlAttributes: new { @class = "header-title", style = "color: #10c469; font-weight: 500;" })
+								</span>
+								<a href="#selectBudgetItemType" id="addItems" data-toggle="modal">
+									<i class="m-t-20 fa fa-plus-square fa-lg fa-pull-right" style="color: #10c469;"></i>
+								</a>
+							</h4>
+						</div>
+						<div class="panel-collapse collapse" id="collapseBudgets" role="tabpanel">
+							<div class="panel-body">
+								<div id="budgetAdded">
+									<table id="datatable-budgets" class="table table-striped table-bordered table-responsive">
+										<thead>
+											<tr>
+												<th>Budget Name<br />(Category)</th>
+												<th>Budget Item</th>
+												<th style="text-align: right;">Budget<br /> Amount</th>
+												<th class="nosort"></th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach (var item in Model.budgetList)
+											{
+												foreach (var bitem in item.BudgetItems)
+												{
+												<tr>
+													<td>@item.BudgetName</td>
+													<td>@bitem.ItemName</td>
+													<td style="text-align: right;">@bitem.ItemAmount.ToString("C")</td>
+													<td style="text-align: center;">
+														<a href="javascript:void(0)"><i class="fa fa-pencil m-r-10" style="color: #10c469;"></i></a>
+														<a href="javascript:void(0)"><i class="fa fa-trash-o m-l-5" style="color: #10c469;"></i></a>
+													</td>
+												</tr>
+												}
+											}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel panel-default bx-shadow-none m-b-5">
+						<div class="panel-heading" role="tab" id="headingTransactions">
+							<h4 class="header-title">
+								<img src="~/Content/assets/images/TransactionsIcon.png" class="media-heading img-circle img-thumbnail m-r-10" style="width: 64px; height: 64px;" />
+								<span style="color: #10c469;">
+									@Ajax.ActionLink("transactions", "TransactionsListUpdate", "Dashboard", null, ajaxOptions: new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "transactionAdded", OnComplete = "showTransactionsList", LoadingElementId = "loadingIcon" }, htmlAttributes: new { @class = "header-title", style = "color: #10c469; font-weight: 500;" })
+								</span>
+								@Ajax.ActionLink(" ", "CreateAddTransactionForm", "Dashboard", null, ajaxOptions: new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "addTransactionModalBody", OnComplete = "showCreateTransactionForm" }, htmlAttributes: new { @class = "m-t-20 fa fa-plus-square fa-lg fa-pull-right", style = "color: #10c469;" })
+							</h4>
+						</div>
+						<div class="panel-collapse collapse" id="collapseTransactions" role="tabpanel">
+							<div class="panel-body">
+								<div id="transactionAdded">
+									<table id="datatable-transactions" class="table table-striped table-bordered table-responsive">
+										<thead>
+											<tr>
+												<th>Description</th>
+												<th style="text-align: right;">Amount</th>
+												<th>Bank Account</th>
+												<th>Budget</th>
+												<th>Reconciled</th>
+												<th>Reconciled<br />Amount</th>
+												<th class="nosort"></th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach (var item in Model.transactionList)
+											{
+											<tr>
+												<td>@item.Description</td>
+												<td style="text-align: right;">@item.TransactionAmount.ToString("C")</td>
+												<td>@item.BankAccount.AccountName</td>
+												<td>@item.BudgetItem.ItemName</td>
+												<td>
+													@if (@item.Reconciled == true)
+													{
+													<i class="fa fa-check"></i>
+													}
+												</td>
+												<td style="text-align: right;">@item.ReconciledAmount.ToString("C")</td>
+												<td style="text-align: center;">
+													<a href="javascript:void(0)"><i class="fa fa-pencil m-r-10" style="color: #10c469;"></i></a>
+													@Ajax.ActionLink(" ", "ConfirmTransactionDelete", new { id = item.Id }, new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "transactionToDelete", LoadingElementId = "loadingIcon", OnComplete = "confirmTransactionDelete" }, new { @class = "fa fa-trash-o m-l-5", style = "color: #10c469;" })
+												</td>
+											</tr>
+											}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-4">
+		<div class="card-box p-b-10 p-t-10">
+			<div class="row">
+				<div class="pannel-group" id="accordion" role="tablist">
+					<div class="panel panel-default bx-shadow-none m-b-5">
+						<div class="panel-heading" role="tab" id="headingBudgetStatus">
+							<h4 class="header-title">
+								<img src="~/Content/assets/images/StatusIcon.png" class="media-heading img-circle img-thumbnail m-r-10" style="width: 64px; height: 64px;" />
+								<span style="color: #10c469;">
+									@Ajax.ActionLink("budget status", "BudgetStatusUpdate", "Dashboard", null, ajaxOptions: new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "budgetStatusAdded", OnComplete = "showBudgetStatusList", LoadingElementId = "loadingIcon" }, htmlAttributes: new { @class = "header-title", style = "color: #10c469; font-weight: 500;" })
+								</span>
+							</h4>
+						</div>
+						<div class="panel-collapse collapse" id="collapseBudgetStatus" role="tabpanel">
+							<div class="panel-body">
+								<div id="budgetStatusAdded">
+									<div class="card-box">
+										<h4 class="header-title m-t-0 m-b-30">Statistics</h4>
+
+										<div class="widget-chart-1">
+											<div class="widget-chart-box-1">
+												<input data-plugin="knob" data-width="80" data-height="80" data-fgColor="#ffbd4a"
+													   data-bgColor="#FFE6BA" value="80"
+													   data-skin="tron" data-angleOffset="180" data-readOnly=true
+													   data-thickness=".15" />
+											</div>
+
+
+											<div class="widget-detail-1">
+												<h2 class="p-t-10 m-b-0" data-plugin="counterup"> 4569 </h2>
+												<p class="text-muted">Revenue today</p>
+											</div>
+										</div>
+
+
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="selectBudgetItemType" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createBudgetModal" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Create A Budget Item</h4>
+			</div>
+			@using (Ajax.BeginForm("BudgetCreate", "Dashboard", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "budgetAdded", LoadingElementId = "loadingIcon" }))
+			{
+			@Html.AntiForgeryToken()
+				<div class="modal-body">
+					<div class="form-horizontal">
+						<div class="row">
+							<div class="col-sm-6">
+								@Html.Label("Choose a Budget Item(& Category)")
+								<select class="form-control select2" id="budgetCategoriesTypes" name="BudgetName">
+									<option value="Select">Select</option>
+									<optgroup label="(Income)">
+										<option value="Income/Paycheck">Paycheck</option>
+										<option value="Income/Bonus">Bonus</option>
+									</optgroup>
+									<optgroup label="(Auto & Transportation)">
+										<option value="Auto & Transportation/Gas">Gas</option>
+										<option value="Auto & Transportation/Service">Service</option>
+										<option value="Auto & Transportation/Taxi & Uber">Taxi/Uber</option>
+										<option value="Auto & Transportation/Payment">Payment</option>
+										<option value="Auto & Transportation/Insurance">Insurance</option>
+									</optgroup>
+									<optgroup label="(Entertainment)">
+										<option value="Entertainment/Movies">Movies/DVDS</option>
+										<option value="Entertainment/Music">Music/Concerts</option>
+										<option value="Entertainment/Print">Books/Newspaper/Magazines</option>
+									</optgroup>
+									<optgroup label="(Food & Dining)">
+										<option value="Food & Dining/Bars">Bars</option>
+										<option value="Food & Dining/Coffee Shops">Coffee Shops</option>
+										<option value="Food & Dining/Fast Food">Fast Food</option>
+										<option value="Food & Dining/Dining Out">Dining Out</option>
+										<option value="Food & Dining/Groceries">Groceries</option>
+									</optgroup>
+									<optgroup label="(Health & Fitness)">
+										<option value="Health & Fitness/Dentist">Dentist</option>
+										<option value="Health & Fitness/Doctor">Doctor</option>
+										<option value="Health & Fitness/Eyecare">Eyecare</option>
+										<option value="Health & Fitness/Gym">Gym</option>
+										<option value="Health & Fitness/Pharmacy">Pharmacy</option>
+										<option value="Health & Fitness/Health Insurance">Health Insurance</option>
+									</optgroup>
+									<optgroup label="(Home)">
+										<option value="Home/Furnishings">Furnishings</option>
+										<option value="Home/Home Improvement">Home Improvement</option>
+										<option value="Home/Lawn & Garden">Lawn & Garden</option>
+										<option value="Home/Mortgage & Rent">Mortgage/Rent</option>
+										<option value="Home/Home Supplies">Home Supplies</option>
+									</optgroup>
+									<optgroup label="(Personal Care)">
+										<option value="Personal Care/Hair">Hair</option>
+										<option value="Personal Care/Spa">Spa</option>
+										<option value="Personal Care/Products">Products</option>
+									</optgroup>
+									<optgroup label="(Shopping)">
+										<option value="Shopping/Clothing">Clothing</option>
+										<option value="Shopping/Shoes">Shoes</option>
+									</optgroup>
+									<optgroup label="(Travel)">
+										<option value="Travel/Air">Air Travel</option>
+										<option value="Travel/Hotel">Hotel</option>
+										<option value="Travel/Rental Car">Rental Car</option>
+										<option value="Travel/Vacation">Vacation</option>
+									</optgroup>
+									<optgroup label="(Utilities)">
+										<option value="Utilities/Cable">Cable</option>
+										<option value="Utilities/Internet">Internet</option>
+										<option value="Utilities/Mobile Phone">Mobile Phone</option>
+										<option value="Utilities/Electricity">Electricity</option>
+										<option value="Utilities/Gas">Gas</option>
+										<option value="Utilities/Water">Water</option>
+									</optgroup>
+								</select>
+							</div>
+							<div class="col-sm-6">
+								@Html.Label("Enter a Budget Amount")
+								@Html.Editor("itemAmount", new { htmlAttributes = new { @class = "required form-control vertical-spin", id = "budgetAmount", LoadingElementId = "loadingIcon" } })
+								@Html.ValidationMessage("itemAmount", "", new { @class = "text-danger" })
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-success btn-rounded w-md" id="closeModal">Save</button>
+					<button type="button" class="btn btn-danger btn-rounded w-md" id="addCustom">Custom Item</button>
+					<a href="#" type="button" class="btn btn-default btn-rounded w-md waves-effect" data-dismiss="modal">Cancel</a>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+<div id="createBudgetItemType" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createBudgetModal" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Create A Custom Budget Item</h4>
+			</div>
+			@using (Ajax.BeginForm("CreateCustom", "Dashboard", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "budgetAdded", LoadingElementId = "loadingIcon" }))
+			{
+			@Html.AntiForgeryToken()
+				<div class="modal-body">
+					<div class="form-horizontal">
+						<div class="row">
+							<div class="col-sm-6">
+								@Html.Label("Create a custom category")
+								@Html.Editor("ItemCategory", new { htmlAttributes = new { @class = "form-control", id = "itemCategory" } })
+							</div>
+							<div class="col-sm-6">
+								@Html.Label("Create a custom item")
+								@Html.Editor("ItemName", new { htmlAttributes = new { @class = "form-control", id = "itemName" } })
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							@Html.Label("Enter a Budget Amount")
+							@Html.Editor("ItemAmount", new { htmlAttributes = new { @class = "required form-control vertical-spin", id = "itemAmount" } })
+							@Html.ValidationMessage("ItemAmount", "", new { @class = "text-danger" })
+						</div>
+						<div class="col-sm-6">
+							@Html.Label("Is this Income or an Expense?")
+							<select class="form-control select2" id="itemType" name="ItemType">
+								<option value="Select">Select</option>
+								<option value="Income">Income</option>
+								<option value="Expense">Expense</option>
+							</select>
+
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-warning btn-rounded w-md" id="closeCustomModal">Save</button>
+					<a href="#" type="button" class="btn btn-default btn-rounded w-md waves-effect" data-dismiss="modal">Cancel</a>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+<div id="addBankAccountModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createBankAccount" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Create An Account</h4>
+			</div>
+			@using (Ajax.BeginForm("BankAccountCreate", "Dashboard", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "bankAccountAdded", LoadingElementId = "loadingIcon", OnSuccess = "resetAddBankAccountModal" }, new { id = "addBankAccountForm" }))
+			{
+			@Html.AntiForgeryToken()
+				<div class="modal-body">
+					<div class="form-horizontal">
+						<div class="form-group">
+							<div class="col-md-8">
+								@Html.LabelFor(model => model.bankAccount.AccountName, "Bank Account Name", new { @class = "form-label" })
+								@Html.EditorFor(model => model.bankAccount.AccountName, new { htmlAttributes = new { @class = "required form-control", id = "AccountName", placeholder = "Bank Account Name" } })
+								@Html.ValidationMessageFor(model => model.bankAccount.AccountName, "", new { @class = "text-danger" })
+							</div>
+							<div class="col-md-4">
+								@Html.LabelFor(model => model.bankAccount.CreatedAmount, "Current Account Balance", new { @class = "form-label" })
+								@Html.EditorFor(model => model.bankAccount.CreatedAmount, new { htmlAttributes = new { @class = "required form-control vertical-spin" } })
+								@Html.ValidationMessageFor(model => model.bankAccount.CreatedAmount, "", new { @class = "text-danger" })
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-12">
+								@Html.LabelFor(model => model.bankAccount.AccountDescription, "Account Description", new { @class = "form-label" })
+								@Html.TextAreaFor(model => model.bankAccount.AccountDescription, htmlAttributes: new { @class = "required form-control", id = "AccountDescription", maxlength = "225", placeholder = "Account Description" })
+								@Html.ValidationMessageFor(model => model.bankAccount.AccountDescription, "", new { @class = "text-danger" })
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-success w-md btn-rounded" id="closeAddBankAccountModal">Save</button>
+					<a href="#" type="button" class="btn btn-default waves-effect w-md btn-rounded" data-dismiss="modal">Cancel</a>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+<div id="addTransactionModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createTransaction" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Add A Transaction</h4>
+			</div>
+
+			@using (Ajax.BeginForm("TransactionCreate", "Dashboard", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "transactionAdded", LoadingElementId = "loadingIcon", OnSuccess = "resetCreateTransactionForm" }))
+			{
+			@Html.AntiForgeryToken()
+				<div class="modal-body" id="addTransactionModalBody">
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-success w-md btn-rounded" id="closeAddTransactionModal">Save</button>
+					<a href="#" type="button" class="btn btn-default waves-effect w-md btn-rounded" data-dismiss="modal">Cancel</a>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+
+
+<div id="deleteTransactionConfirmModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteTransactionConfirmModal" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Confirm Delete?</h4>
+			</div>
+			<div class="modal-body">
+				<div id="transactionToDelete">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="loadingIcon" style="display: none; position: absolute; top: 50%; left: 50%; padding: 2px;">
+	<img src="~/Content/assets/images/Rolling.gif" />
+</div>
+
+
+@section scripts {
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#datatable-transactions').DataTable({
+				responsive: true,
+				'columnDefs': [{
+					'targets': 'nosort',
+					'orderable': false
+				}]
+			});
+
+			$('#datatable-budgets').DataTable({
+				responsive: true,
+				'columnDefs': [{
+					'targets': 'nosort',
+					'orderable': false
+				}]
+			});
+
+			$('#datatable-accounts').DataTable({
+				responsive: true,
+				'columnDefs': [{
+					'targets': 'nosort',
+					'orderable': false
+				}]
+			});
+
+			@*$('#addTransactionButton').click(function() {
+				$.post({
+					url: "@Url.Action("CreateAddTransactionForm", "Dashboard")"
+				}).done(function() {
+					$("#addTransactionModal").modal("show");
+				});*@
+
+			$("#closeAddBankAccountModal").click(function() {
+				$("#addBankAccountModal").modal("toggle");
+			});
+
+			$("#closeAddTransactionModal").click(function() {
+				$("#addTransactionModal").modal("toggle");
+			});
+
+
+			//$("#closeDeleteTransactionModal").click(function() {
+			//	$("#deleteTransactionConfirmModal").modal("toggle");
+			//});
+
+			$("#closeModal").click(function() {
+				$("#selectBudgetItemType").modal("toggle");
+			});
+
+			$("#closeCustomModal").click(function() {
+				$("#createBudgetItemType").modal("toggle");
+			});
+
+			$("#closeInviteModal").click(function() {
+				$("#sendInvitations").modal("toggle");
+			});
+
+			$("#addCustom").click(function() {
+				$("#selectBudgetItemType").modal("toggle");
+				$("#createBudgetItemType").modal("toggle");
+			});
+
+			$('#addItems').click(function() {
+				$("#budgetItemForm").trigger("reset");
+			});
+
+			$('textarea#AccountDescription').maxlength({
+				alwaysShow: true,
+				warningClass: "label label-success",
+				limitReachedClass: "label label-danger",
+				separator: ' out of ',
+				preText: 'You typed ',
+				postText: ' chars available.',
+				validate: true
+			});
+
+			$(".vertical-spin").TouchSpin({
+				min: 0.00,
+				max: 999999.99,
+				initval: 0.00,
+				decimals: 2,
+				step: 1.00,
+				forcestepdivisibility: "none",
+				verticalbuttons: true,
+				buttondown_class: "btn btn-primary",
+				buttonup_class: "btn btn-primary",
+				verticalupclass: 'ti-plus',
+				verticaldownclass: 'ti-minus'
+			});
+
+		});
+
+		function resetAddBankAccountModal() {
+			$("#addBankAccountForm").trigger("reset");
+		};
+
+		function showCreateTransactionForm() {
+			$("#addTransactionModal").modal("toggle");
+		};
+
+		function showTransactionsList() {
+			$("#collapseTransactions").collapse("toggle");
+		};
+
+		function showBankAccountsList() {
+			$("#collapseAccounts").collapse("toggle");
+		};
+
+		function showBudgetItemsList() {
+			$("#collapseBudgets").collapse("toggle");
+		};
+
+		function showBudgetStatisList() {
+			$("#collapseBudgetStatus").collapse("toggle");
+		};
+
+		function resetBudgetItemTypeForm() {
+			$("#selectBudgetItemTypeForm").trigger("reset");
+			$("#createBudgetItemTypeForm").trigger("reset");
+		};
+
+		function resetCreateTransactionForm() {
+			$("#createTransactionForm").trigger("reset");
+			$("#reconciledAmount").val("0.00");
+		};
+
+		function confirmTransactionDelete() {
+			$("#deleteTransactionConfirmModal").modal("toggle");
+		};
+
+		function closeDeleteTransactionModal() {
+			$("#deleteTransactionConfirmModal").modal("toggle");
+		};
+
+	</script>
+}
